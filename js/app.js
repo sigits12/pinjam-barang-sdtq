@@ -25,6 +25,13 @@ if (cached) {
 // ===============================
 // Elemen HTML
 // ===============================
+
+const controls = document.getElementById("controls");
+const loading = document.getElementById("loading");
+
+controls.classList.add("hidden");
+loading.style.display = "block";
+
 const namaBarangEl = document.getElementById("namaBarang");
 const statusBarangEl = document.getElementById("statusBarang");
 const formPinjam = document.getElementById("formPinjam");
@@ -35,6 +42,20 @@ const pesanEl = document.getElementById("pesan");
 const guruSelect = document.getElementById("guru");
 const btnPinjam = document.getElementById("btnPinjam");
 const btnKembali = document.getElementById("btnKembali");
+
+const btnBooking = document.getElementById("btnBooking");
+const bookingMulai = document.getElementById("bookingMulai");
+const bookingSelesai = document.getElementById("bookingSelesai");
+
+function setDisabled(state) {
+  guruSelect.disabled = state;
+  btnPinjam.disabled = state;
+  btnKembali.disabled = state;
+  btnBooking.disabled = state;
+}
+
+setDisabled(true);
+loading.style.display = "block";
 
 // ===============================
 // Validasi awal
@@ -58,7 +79,9 @@ fetch(`${API_URL}?action=getBarang&id=${barangId}`)
     // render
     namaBarangEl.innerText = data.nama_barang;
     statusBarangEl.innerText = data.status;
-
+    loading.style.display = "none";
+    setDisabled(false);
+    controls.classList.remove("hidden");
     // simpan cache
     localStorage.setItem(cacheKey, JSON.stringify(data));
 
@@ -73,7 +96,10 @@ fetch(`${API_URL}?action=getBarang&id=${barangId}`)
   })
   .catch(err => {
     pesanEl.innerText = "Gagal memuat data barang";
+    setDisabled(true);
     console.error(err);
+    loading.innerText = "❌ Gagal memuat data barang";
+    controls.classList.add("hidden");
   });
 
 // ===============================
@@ -129,3 +155,53 @@ btnKembali.addEventListener("click", () => {
     console.error(err);
   });
 });
+
+btnBooking.addEventListener("click", () => {
+  const namaGuru = guruSelect.value;
+  const mulai = bookingMulai.value;
+  const selesai = bookingSelesai.value;
+
+  if (!namaGuru || !mulai || !selesai) {
+    alert("Lengkapi nama guru dan waktu booking");
+    return;
+  }
+
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "booking",
+      barang_id: barangId,
+      guru: namaGuru,
+      mulai: mulai,
+      selesai: selesai
+    })
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.error) {
+      alert(res.error);
+      return;
+    }
+
+    alert("Booking berhasil");
+    bookingMulai.value = "";
+    bookingSelesai.value = "";
+  })
+  .catch(() => alert("Gagal booking"));
+});
+
+btnPinjam.addEventListener("click", () => {
+  if (btnPinjam.disabled) return;
+  // lanjut pinjam
+});
+
+btnKembali.addEventListener("click", () => {
+  if (btnKembali.disabled) return;
+  // lanjut pinjam
+});
+
+btnBooking.addEventListener("click", () => {
+  if (btnBooking.disabled) return;
+  // lanjut pinjam
+});
+
