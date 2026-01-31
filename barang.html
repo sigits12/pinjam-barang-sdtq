@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peminjaman Barang</title>
+
+  <!-- CSS sederhana -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>Peminjaman Barang Sekolah</h2>
+
+    <!-- Informasi Barang -->
+    <div class="card">
+      <p><strong>Barang:</strong> <span id="namaBarang">-</span></p>
+      <p><strong>Status:</strong> <span id="statusBarang">-</span></p>
+    </div>
+
+    <!-- Form Pinjam -->
+    <div class="card" id="formPinjam">
+      <label for="guru">Pilih Nama Guru</label>
+      <select id="guru">
+        <option value="">-- pilih guru --</option>
+        <option value="Adi">Adi</option>
+        <option value="Budi">Budi</option>
+        <option value="Siti">Siti</option>
+      </select>
+
+      <button id="btnPinjam">Pinjam</button>
+    </div>
+
+    <!-- Tombol Kembalikan -->
+    <div class="card" id="formKembali" style="display:none;">
+      <p>Dipinjam oleh: <strong id="namaPeminjam">-</strong></p>
+      <button id="btnKembali">Kembalikan</button>
+    </div>
+
+    <p id="pesan"></p>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
